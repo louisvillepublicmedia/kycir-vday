@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang='en-GB'>
+<head>
+  <link rel="stylesheet" href="css/style.css">
+  <meta charset='utf-8'>
+  <title>Ractive test</title>
+</head>
+
+<body>
+  <h1>Ractive test</h1>
+
+  <!--
+       1. This is the element we'll render our Ractive to.
+  -->
+  <div id='container'></div>
+
+  <!--
+       2. You can load a template in many ways. For convenience, we'll include it in
+       a script tag so that we don't need to mess around with AJAX or multiline strings.
+       Note that we've set the type attribute to 'text/ractive' - though it can be
+       just about anything except 'text/javascript'
+  -->
+  <script id='template' type='text/ractive'>
+    <div id="choose-card" class="section">
+    {{#each cards}}
+      <div class="card">
+        <img on-click='activate' src="{{image}}" alt="{{name}}" />
+        <h3>{{name}}</h3>
+        <h4>{{title}}</h4>
+      </div>
+    {{/each}}
+    </div>
+    
+    {{#if currentCard}}
+    <div id="mad-lib" class="section">
+      <img src="{{currentCard.image}}" alt="{{name}}" />
+      <p class="spread-love blocktext">Help {{currentCard.name}} spread the love this Valentine's Day:</p>
+      <p id="quote" class="blocktext">{{{madLib}}}</p>
+      <p class="blocktext"><a href="#" class="myButton" on-click='submit'>Submit</a></p>
+    </div>
+    {{/if}}
+    
+    {{#if completedMadLib}}
+    <div id="share" class="section">
+      <canvas id="card-canvas" width="750" height="370"></canvas>
+      <!--<p id="madLibText" class="blocktext">{{completedMadLib}}</p>-->
+    </div>
+    {{/if}}
+  </script>
+
+  <!--
+       3. You can always get the most recent stable version from the URL below.
+       If you want the newest features (unstable!), use the 'edge' version instead:
+
+           http://cdn.ractivejs.org/edge/ractive.min.js
+
+       If you need IE8 support, change 'ractive' to 'ractive-legacy'.
+  -->
+  <script src='js/ractive.min.js'></script>
+  <script src='https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js'></script>
+  <script src='js/jquery.profanityfilter.min.js'></script>
+
+  <!--
+       4. We've got an element in the DOM, we've created a template, and we've
+       loaded the library - now it's time to build our Hello World app.
+  -->
+  <script>
+    
+    //This function wraps the text on the canvas. By default, canvas
+    // fillText does not wrap.
+    // http://www.html5canvastutorials.com/tutorials/html5-canvas-wrap-text-tutorial/
+    function wrapText(context, text, x, y, maxWidth, lineHeight) {
+      var words = text.split(' ');
+      var line = '';
+
+      for(var n = 0; n < words.length; n++) {
+        var testLine = line + words[n] + ' ';
+        var metrics = context.measureText(testLine);
+        var testWidth = metrics.width;
+        if (testWidth > maxWidth && n > 0) {
+          context.fillText(line, x, y);
+          line = words[n] + ' ';
+          y += lineHeight;
+        }
+        else {
+          line = testLine;
+        }
+      }
+      context.fillText(line, x, y);
+    }
+    
+    var ractive, cards, quotes;
+    
+    cards = [
+        {characterID:1, name:'Brendan McCarthy', title:'Overlord',image:'img/character-01.jpg', card:'img/card-01.jpg'},
+        {characterID:2, name:'R.G. Dunlop', title:'Admiral of the Fleet',image:'img/character-02.jpg', card:'img/card-01.jpg'},
+        {characterID:3, name:'Kate Howard', title:'Lady of Treasure',image:'img/character-03.jpg', card:'img/card-01.jpg'},
+        {characterID:4, name:'Alexandra Kanik', title:'Divine Adoratrice',image:'img/character-04.jpg', card:'img/card-01.jpg'}
+    ];
+    
+    quotes = [
+      {quoteID:1, characterID:1, quote:"Everything is funny, as long as it's happening to somebody else.", madLib:"Everything is ***, as long as it's *** to somebody else."},
+      {quoteID:2, characterID:1, quote:"Get your facts first, then you can distort them as you please.", madLib:"Get your *** first, then you can *** them as you please."},
+      {quoteID:3, characterID:1, quote:"People who think they know everything are a great annoyance to those of us who do.", madLib:"People who think they know *** are a great annoyance to those of us who do."},
+      {quoteID:4, characterID:2, quote:"There are only three things women need in life: food, water, and compliments.", madLib:"There are only three things women need in life: ***, ***, and ***."},
+      {quoteID:5, characterID:2, quote:"If this is coffee, please bring me some tea; but if this is tea, please bring me some coffee.", madLib:"If this is ***, please bring me some ***; but if this is ***, please bring me some ***."},
+      {quoteID:6, characterID:2, quote:"I always wanted to be somebody, but now I realize I should have been more specific.", madLib:"I always wanted to be ***, but now I realize I should have been more ***."},
+    ]
+    
+    ractive = new Ractive({
+      // The `el` option can be a node, an ID, or a CSS selector.
+      el: '#container',
+
+      // We could pass in a string, but for the sake of convenience
+      // we're passing the ID of the <script> tag above.
+      template: '#template',
+
+      // Here, we're passing in some initial data
+      data: { 
+        cards: cards,
+        //editme: 'Edit me',
+        }
+    });
+    
+    ractive.on('activate', function(event){
+      // `this` is the ractive
+      // `event` contains information about the proxy event
+      ractive.set('currentCard', event.context);
+      
+      ractive.observe('currentCard', function(newValue, oldValue, keypath){
+        if(newValue){
+          //Create an array for quote available to the selected card
+          var possibleQuotes = []
+          
+          for(var i = 0; i < quotes.length; i++){
+            var quoteCharID = quotes[i]['characterID'];
+            var charID = newValue.characterID;
+            
+            //If the characterID of the quote matches the characterID 
+            //of the chosed card, add the quote to possibleQuotes array.
+            if(charID == quoteCharID){
+              possibleQuotes.push(quotes[i])
+            }
+          }
+          
+          //Randomly choose a quote from the array of possibleQuotes
+          var randoQuote = possibleQuotes[Math.floor(Math.random() * possibleQuotes.length)];
+          var madLib = randoQuote.madLib;
+          
+          //Split the madLib versio of the quote by those three asktrisks
+          //then join it together with editable spans
+          var editableMadLib = madLib.split("***").join('<span on-click="activateEdit" class="fill-in" contenteditable="true" value="Edit this" style="display:inline-block; min-width:50px;">Edit this</span>');
+                    
+          ractive.set('currentCard.quote', randoQuote.quote);
+          ractive.set('madLib', editableMadLib);
+          ractive.set('card', newValue.card);
+        }
+      });
+      
+      //Empty the contenteditable spans when the user clicks. This is
+      // particularly useful for mobile.
+      // http://stackoverflow.com/questions/9093424/placeholder-in-contenteditable-focus-event-issue
+      $('span.fill-in').on('activateEdit', function() {
+        $(this).empty();
+        var range, sel;
+        if ( (sel = document.selection) && document.body.createTextRange) {
+          range = document.body.createTextRange();
+          range.moveToElementText(this);
+          range.select();
+        }
+      });
+      $('span.fill-in').focus(function() {
+        if (this.hasChildNodes() && document.createRange && window.getSelection) {
+          $(this).empty();
+          var range = document.createRange();
+          range.selectNodeContents(this);
+          var sel = window.getSelection();
+          sel.removeAllRanges();
+          sel.addRange(range);
+        }
+      });
+      
+      //Scroll down to the madLib section once we've set the scene
+      $('html, body').animate({
+        scrollTop: $("#mad-lib").offset().top
+      }, 2000);
+    });
+    
+    ractive.on('submit', function(event){
+      
+      //Grab the submitted text from the #quote element
+      var completedMadLib = $('#quote').text();
+      var profaneText = '';
+      var card = ractive.get('card');
+      
+      //Filter for bad words. If bad words are detected set variable
+      // to Yes and throw and alert.
+      $('#quote').profanityFilter({
+        externalSwears: 'data/swearWords.json',
+        profaneText: function(data){
+          alert('Dude. Come on. Be civil.');
+          profaneText = 'Yes';
+        }
+      })
+      
+      //If that bad words variable is set to Yes, don't allow
+      // the user to continue. Toss them back to madLibs section.
+      //If no bad words, continue on.
+      if(profaneText == 'Yes'){
+        $('html, body').animate({
+          scrollTop: $("#mad-lib").offset().top
+        }, 2000);
+      }else{
+        ractive.set('completedMadLib', completedMadLib);
+        
+        //Establish what to put on the canvas
+        var canvas = document.getElementById("card-canvas");
+        var context = canvas.getContext("2d");
+        var imageObj = new Image();
+        imageObj.onload = function(){
+          context.drawImage(imageObj, 10, 10);
+          var maxWidth = 350;
+          var lineHeight = 40;
+          var x = 375;
+          var y = 60;
+          var text = completedMadLib;
+          context.font = "35px Helvetica";
+          wrapText(context, text, x, y, maxWidth, lineHeight);
+        };
+        imageObj.src = card; 
+        
+        //Scroll down to the share section once we've set the scene.
+        $('html, body').animate({
+          scrollTop: $("#share").offset().top
+        }, 2000);
+      }
+    })
+    
+  </script>
+</body>
+</html>
