@@ -45,11 +45,9 @@ p.blocktext{
 }
 
 span.fill-in{
-  display:block;
   background:#cccccc;
   padding-left: 3px;
   padding-right: 3px;
-  width:30px;
   font-weight: 200;
   color:#666666;
 }

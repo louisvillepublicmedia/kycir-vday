@@ -3,11 +3,11 @@
 <head>
   <link rel="stylesheet" href="css/style.css">
   <meta charset='utf-8'>
-  <title>Ractive test</title>
+  <title>Operation Make Love, Not Twitter War</title>
 </head>
 
 <body>
-  <h1>Ractive test</h1>
+  <h1>Operation Make Love, Not Twitter War</h1>
 
   <!--
        1. This is the element we'll render our Ractive to.
@@ -43,7 +43,6 @@
     {{#if completedMadLib}}
     <div id="share" class="section">
       <canvas id="card-canvas" width="750" height="370"></canvas>
-      <!--<p id="madLibText" class="blocktext">{{completedMadLib}}</p>-->
     </div>
     {{/if}}
   </script>
@@ -118,7 +117,7 @@
       // Here, we're passing in some initial data
       data: { 
         cards: cards,
-        //editme: 'Edit me',
+        //editme: 'Edit this',
         }
     });
     
@@ -149,7 +148,7 @@
           
           //Split the madLib versio of the quote by those three asktrisks
           //then join it together with editable spans
-          var editableMadLib = madLib.split("***").join('<span on-click="activateEdit" class="fill-in" contenteditable="true" value="Edit this" style="display:inline-block; min-width:50px;">Edit this</span>');
+          var editableMadLib = madLib.split("***").join('<span on-click="activateEdit" class="fill-in" contenteditable="true" style="display:inline-block; width:75px;">Edit this</span>');
                     
           ractive.set('currentCard.quote', randoQuote.quote);
           ractive.set('madLib', editableMadLib);
@@ -196,12 +195,12 @@
       //Filter for bad words. If bad words are detected set variable
       // to Yes and throw and alert.
       $('#quote').profanityFilter({
-        externalSwears: 'data/swearWords.json',
+        externalSwears: 'data/swearWords2.json',
         profaneText: function(data){
-          alert('Dude. Come on. Be civil.');
+          alert("Either you didn't fill out the form, or you included bad language. Not cool dude. KyCIR is a classy news org. Try again.");
           profaneText = 'Yes';
         }
-      })
+      });
       
       //If that bad words variable is set to Yes, don't allow
       // the user to continue. Toss them back to madLibs section.
@@ -217,17 +216,41 @@
         var canvas = document.getElementById("card-canvas");
         var context = canvas.getContext("2d");
         var imageObj = new Image();
+        var img = new Image();
+        imageObj.src = card;
         imageObj.onload = function(){
+          
           context.drawImage(imageObj, 10, 10);
+          context.font = "35px Helvetica";
           var maxWidth = 350;
           var lineHeight = 40;
           var x = 375;
           var y = 60;
           var text = completedMadLib;
-          context.font = "35px Helvetica";
+          
           wrapText(context, text, x, y, maxWidth, lineHeight);
+          
+          //Turn the canvas into an image and send to the server with the
+          //ajax command. The return from .done() is the completed image url
+          var dataURL = canvas.toDataURL();
+          
+          $.ajax({
+            type: 'POST',
+            url: 'image-save.php',
+            data:{
+              imgBase64: dataURL
+            }
+          }).done(function(o){
+            console.log(o);
+          });
+          
         };
-        imageObj.src = card; 
+        
+        
+        /*var ajax = new XMLHttpRequest();
+        ajax.open("POST",'script.php',false);
+        ajax.setRequestHeader('Content-Type', 'application/upload');
+        ajax.send(dataURL);*/
         
         //Scroll down to the share section once we've set the scene.
         $('html, body').animate({
