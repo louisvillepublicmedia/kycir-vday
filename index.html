@@ -55,9 +55,9 @@
 
        If you need IE8 support, change 'ractive' to 'ractive-legacy'.
   -->
-  <script src='js/ractive.min.js'></script>
-  <script src='https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js'></script>
-  <script src='js/jquery.profanityfilter.min.js'></script>
+  <script src='scripts/js/ractive.min.js'></script>
+  <script src='scripts/js/jquery-3.1.1.min.js'></script>
+  <script src='scripts/js/jquery.profanityfilter.min.js'></script>
 
   <!--
        4. We've got an element in the DOM, we've created a template, and we've
@@ -236,7 +236,7 @@
           
           $.ajax({
             type: 'POST',
-            url: 'image-save.php',
+            url: 'scripts/image-save.php',
             data:{
               imgBase64: dataURL
             }
