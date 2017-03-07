@@ -4,7 +4,7 @@ Live demo: http://interactives.kycir.org/vday/play.html
 
 More and more politicians are communicating with each other and the public via social media outlets like twitter. And sometimes, the things they say aren't so nice.
 
-Operation Make Love, Not Twitter War is a way to bring attention to the things that politicians say over social media through a fun, engaging game format.
+**Operation Make Love, Not Twitter War** is a way to bring attention to the things that politicians say over social media through a fun, engaging game format.
 
 - you pull images of politicians
 - associate tweets or short quotes to each politician
