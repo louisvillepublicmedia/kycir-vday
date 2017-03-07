@@ -1,41 +1,128 @@
+/**********************************
+  GENERAL STYLES
+**************************************/
+
 body{
   font-family: "Helvetica Neue", Helvetica, sans-serif;
 }
 
-.section{
-  padding:25px 0;
-  margin:50px 0;
-  border-top:3px #cccccc solid;
+.container-fluid {
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto;
 }
 
-.card{
-  display:inline-block;
-  width:20%;
-  padding: 5px 10px;
+.container-fluid:before,
+.container-fluid:after{
+  display: table;
+  content: " ";
 }
 
-.card img{
+* {
+    box-sizing: border-box;
+}
+
+.row{
+  padding:15px 0;
+  margin:25px 0;
+}
+
+[class*="col-"] {
+    float: none;
+    padding: 15px;
+    /*border: 1px solid red;*/
+}
+
+h1{
+  font-size: 1.5em;
+  text-transform: uppercase;
+}
+
+h3{
+  font-size: 1.5em;
+  font-weight: 200;
+}
+
+#header, #footer{
+  color:#ffffff;
+  width:100%;
+  padding:0;
+  margin:0;
+  background-color: #28241E;
+  text-align: center;
+}
+
+#header{
+  border-bottom:#ECDABC 3px solid;
+}
+
+#header img{
+  width: auto;
+}
+
+#header #social li{
+  padding-left:1em;
+}
+
+#header ul{
+  text-align: center;
+  margin:0;
+  padding:0;
+  }
+
+#header li{
+  display: inline-block;
+  list-style: none;
+  padding-left:2em;
+}
+
+#header li:first{
+  display: inline-block;
+  list-style: none;
+  padding-left:0;
+}
+
+#header #menu a{
+  font-weight: 200;
+  color:#ffffff;
+  font-size: 1.5em;
+  text-decoration: none;
+}
+
+#header #menu a.active{
+  text-decoration: underline;
+}
+
+img{
   width:100%;
 }
 
-#mad-lib img{
-  width:300px;
+.lead{
+  font-size: 1.2em;
+  font-weight: 200;
+}
+
+.center{
+  text-align: center;
+}
+
+#footer img{
   display: block;
-  margin-left: auto;
-  margin-right: auto
+  width:50%;
+  margin:auto;
 }
 
-#mad-lib .spread-love{
-  font-size: 2em;
-  text-align: center;
-  
+#footer a{
+  color:#ffffff;
+  font-weight: 800;
 }
+/**********************************
+  PLAY PAGE
+**************************************/
 
-p.blocktext{
-  margin-left: auto;
-  margin-right: auto;
-  width: 40em;
-  text-align: center;
+.card{
+  min-height:350px;
 }
 
 .card img:hover{
@@ -44,13 +131,35 @@ p.blocktext{
   box-shadow: 0px 0px 19px -1px rgba(64,153,255,1);
 }
 
-span.fill-in{
+.card h3,
+.card h4{
+  text-align: center;
+  margin-bottom:.5em;
+  margin-top:.5em;
+}
+
+.step-text{
+  font-size: 2em;
+  text-align: center;
+}
+
+#mad-lib, #choose-card{
+  border-bottom:#cccccc 3px solid;
+}
+
+#mad-lib p{
+  text-align: center;
+}
+
+span.fill-in,
+span.selectAll{
   background:#cccccc;
   padding-left: 3px;
   padding-right: 3px;
   font-weight: 200;
   color:#666666;
 }
+
 
 #quote{
   font-size: 1.5em;
@@ -77,4 +186,110 @@ span.fill-in{
 .myButton:active {
 	position:relative;
 	top:1px;
+}
+
+.shareButton {
+	background-color:#4e88c9;
+	-moz-border-radius:15px;
+	-webkit-border-radius:15px;
+	border-radius:15px;
+	border:1px solid #18ab29;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:21px;
+	padding:15px 50px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #2f6627;
+}
+.shareButton:hover {
+	background-color:#72a4dc;
+}
+.shareButton:active {
+	position:relative;
+	top:1px;
+}
+
+#real-quote{
+  max-width: 500px;
+  margin: auto;
+  display:block;
+  background: #EBEBEB;
+  -moz-border-radius:5px;
+	-webkit-border-radius:5px;
+	border-radius:5px;
+	padding:10px 20px;
+}
+
+
+
+/**********************************
+  RESPONSIVE STUFF
+**************************************/
+
+@media only screen and (min-width: 768px) {
+  .col-1 {width: 8.33%;}
+  .col-2 {width: 16.66%;}
+  .col-3 {width: 25%;}
+  .col-4 {width: 33.33%;}
+  .col-5 {width: 41.66%;}
+  .col-6 {width: 50%;}
+  .col-7 {width: 58.33%;}
+  .col-8 {width: 66.66%;}
+  .col-9 {width: 75%;}
+  .col-10 {width: 83.33%;}
+  .col-11 {width: 91.66%;}
+  .col-12 {width: 100%;}
+  
+  [class*="col-"] {
+    float: left;
+    padding: 15px;
+  }
+
+  .row::after {
+      content: "";
+      clear: both;
+      display: table;
+  }
+  
+  h1{
+    font-size: 1em;
+    text-transform: uppercase;
+  }
+  
+  #header{
+    text-align: left;
+  }
+  
+  #header ul{
+    text-align: right;
+    margin:5px 0 0 0;
+  }
+  
+  #mad-lib img{
+    display: block;
+    margin: auto;
+    width:25%;
+  }
+  
+  #feature img{
+    display: block;
+    margin: auto;
+    width:75%;
+  }
+  
+  #share img{
+    display: block;
+    width:60%;
+    margin:auto;
+  }
+  
+  #footer p{
+    margin-top:3em;
+  }
+  
+  #footer img{
+  width:100%;
+}
 }
