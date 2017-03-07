@@ -13,3 +13,9 @@ More and more politicians are communicating with each other and the public via s
 - the newly created text is placed over an illustrated background, like a card or canvas
 - that canvas is saved as a .png so the user can share or save it
 - all created images are displayed on the results page
+
+
+##Requirements
+
+This app is best deployed on a server over which you have control, like an AWS EC2 server, as it requires a few server-side processes.
+
