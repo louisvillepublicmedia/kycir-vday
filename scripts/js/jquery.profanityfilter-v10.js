@@ -160,27 +160,28 @@
             if (badWords === null) {
                 return;
             }
-
+            
+            //REGEX: numbers or nonword characters within words
+            var regexNonWord = new RegExp(/\b[a-z]+[\d_]+[a-z]*/);
+            
+            //REGEX: repetition of more than 3 letters
+            var regexRepetition = new RegExp(/\b([a-zA-Z0-9])\1{2,}\b/);
+            
+            //REGEX: single character words separated by non-word characters
+            var regexSingle = new RegExp(/\s[b-hj-zB-HJ-Z]{1}\b/);
+            
+            
             // We've got an array of swears, let's proceed with removing them from the element.
             for (i = 0; i < badWords.length; i += 1) {
+                
+                var re = new RegExp('\\b' + badWords[i] + '\\b' + '|' + '\\b' + badWords[i] + 's$' + '\\b' + '|' + '\\b' + badWords[i] + 'es$' + '\\b' + '|' + regexNonWord.source + '|' + regexRepetition.source + '|' + regexSingle.source, 'gi');
                                 
-                //REGEX: numbers or nonword characters within words
-                var regexNonWord = /\b[a-z]+[\d_]+[a-z]*/;
-                
-                //REGEX: repetition of more than 3 letters
-                var regexRepetition = /\b(?=.*(.)\1\1)\b/;
-                
-                //REGEX: single character words separated by non-word characters    
-                var regexSingle = /\s[b-hj-zB-HJ-Z]{1}\b/;
-                
-                var re = new RegExp('\\b' + badWords[i] + '\\b' + '|' + regexNonWord.source + '|' + regexRepetition.source + '|' + regexSingle.source, 'gi');
+                var rand = generateRandomNumber(options.replaceWith.length -1);
 
-                //var rand = generateRandomNumber(options.replaceWith.length -1);
-
-                //rep = options.replaceWith[rand];
+                rep = options.replaceWith[rand];
+                
                 if (typeof options.replaceWith == 'string') {
-                  //rep = options.replaceWith[rand].repeat(badWords[i].length);
-                  rep = '****';
+                  rep = options.replaceWith[rand].repeat(badWords[i].length);
                 }
 
                 // Text nodes
@@ -190,6 +191,7 @@
                         data.push(badWords[i]);
                         if (options.filter) {
                             nodes[x].nodeValue = nodes[x].nodeValue.replace(re, rep);
+                            //nodes[x].nodeValue = nodes[x].nodeValue.replace(re, '--');
                         }
                     }
                 }
@@ -201,13 +203,13 @@
                         data.push(badWords[i]);
                         if (options.filter) {
                             $(inputs[x]).val(inputs[x].value.replace(re, rep));
+                            //$(inputs[x]).val(inputs[x].value.replace(re, '--'));
                         }
                     }
                 }
             }
             
             if (profane) {
-                //console.log(data);
                 options.profaneText(data.unique());
             };
         });
