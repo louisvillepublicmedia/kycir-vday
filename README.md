@@ -4,7 +4,7 @@ Live demo: http://interactives.kycir.org/vday/play.html
 
 The political scene can be ugly. But it doesn’t have to be.
 
-That’s why KyCIR is bringing back Operation Spread Love, Not Hate. We invite you to flip the script on some well-known quotes from some of Kentucky’s most prominent politicians. Some are contentious; some are pleasant political platitudes. But none of them are spreading love. That’s where *Operation Make Love, Not War* comes in.
+That’s why KyCIR is bringing back *Operation Spread Love, Not War*. We invite you to flip the script on some well-known quotes from some of Kentucky’s most prominent politicians. Some are contentious; some are pleasant political platitudes. But none of them are spreading love. That’s where *Operation Make Love, Not War* comes in.
 
 ## How It Works (General)
 
@@ -22,7 +22,7 @@ What you'll need to do:
 - Set up a Facebook Developer App
 
 
-##Requirements
+## Requirements
 
 This app is best deployed on a server over which you have control, like an AWS EC2 server, as it requires a few server-side processes.
 
