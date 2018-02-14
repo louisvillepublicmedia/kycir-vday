@@ -5,6 +5,7 @@
   <link rel="stylesheet" href="css/skeleton.css">
   <meta charset='utf-8'>
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  
   <meta property="fb:app_id" content="169481433545731" />
   <meta property="og:url" content="http://interactives.kycir.org/vday/play.html" />
   <meta property="og:type" content="article" />
@@ -20,21 +21,24 @@
   <meta name="twitter:image" content="http://interactives.kycir.org/vday/img/vday-play.jpg">
   <title>Operation Spread Love, Not Hate</title>
   
+  <!-- Google Analytics code. Reminder, if you're embedding this interactive on your site somewhere,
+      keeping this script in here will double count pageviews.
+  -->
   <script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
     (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
     m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
     })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-  
     ga('create', 'UA-32037403-7', 'auto');
     ga('send', 'pageview');
-  
   </script>
+  
 </head>
 
 <body>
   <div id="fb-root"></div>
   <script>
+    // Facebook share code
     (function(d, s, id) {
       var js, fjs = d.getElementsByTagName(s)[0];
       if (d.getElementById(id)) return;
@@ -43,6 +47,7 @@
       fjs.parentNode.insertBefore(js, fjs);
     }(document, 'script', 'facebook-jssdk'));
     
+    // Twitter share code
     window.twttr = (function(d, s, id) {
       var js, fjs = d.getElementsByTagName(s)[0],
         t = window.twttr || {};
@@ -51,12 +56,10 @@
       js.id = id;
       js.src = "https://platform.twitter.com/widgets.js";
       fjs.parentNode.insertBefore(js, fjs);
-    
       t._e = [];
       t.ready = function(f) {
         t._e.push(f);
       };
-    
       return t;
     }(document, "script", "twitter-wjs"));
   </script>
@@ -100,7 +103,9 @@
       </ol>
     </div>
   </div>
-  <div id="container" class="container-fluid"></div>
+  
+  <!-- This is where all of our content will be populated -->
+  <div id="container"></div>
   
   <div id="footer" class="row">
     <div class="three columns">
@@ -111,7 +116,8 @@
       <p><em>If you are experiencing issues with this app, please contact Alexandra Kanik at akanik@kycir.org.</em></p>
     </div>
   </div>
-
+  
+  <!-- Here's our ractive.js script. This populates our #container div -->
   <script id='template' type='text/ractive'>
     
     <div id="choose-card" class="row">
@@ -162,8 +168,9 @@
   <script>
         
     //This function wraps the text on the canvas. By default, canvas
-    // fillText does not wrap.
-    // http://www.html5canvastutorials.com/tutorials/html5-canvas-wrap-text-tutorial/
+    //fillText does not wrap.
+    //http://www.html5canvastutorials.com/tutorials/html5-canvas-wrap-text-tutorial/
+    
     function wrapText(context, text, x, y, maxWidth, lineHeight) {
       var words = text.split(' ');
       var line = '';
@@ -186,33 +193,42 @@
     
     var ractive, cards, quotes;
     
+    //These are the characters we want the user to choose from.
+    //json created from a csv using csvkit
     cards = [{"characterUID": "1", "name": "Mitch McConnell", "title": "U.S. Senator", "image": "img/characters/character-mcconnell.jpg", "card": "img/cards/card-mcconnell.jpg"}, {"characterUID": "2", "name": "Alison Lundergan Grimes", "title": "Secretary of State", "image": "img/characters/character-grimes.jpg", "card": "img/cards/card-grimes.jpg"}, {"characterUID": "3", "name": "Matt Bevin", "title": "Governor", "image": "img/characters/character-bevin.jpg", "card": "img/cards/card-bevin.jpg"}, {"characterUID": "4", "name": "Jenean Hampton", "title": "Lt. Governor", "image": "img/characters/character-hampton.jpg", "card": "img/cards/card-hampton.jpg"}, {"characterUID": "5", "name": "Steve Beshear", "title": "Former Governor", "image": "img/characters/character-sbeshear.jpg", "card": "img/cards/card-sbeshear.jpg"}, {"characterUID": "7", "name": "Robert Stivers", "title": "Senate President", "image": "img/characters/character-stivers.jpg", "card": "img/cards/card-stivers.jpg"}, {"characterUID": "8", "name": "Rand Paul", "title": "U.S. Senator", "image": "img/characters/character-paul.jpg", "card": "img/cards/card-paul.jpg"}, {"characterUID": "9", "name": "Martha Layne Collins", "title": "Former Governor", "image": "img/characters/character-collins.jpg", "card": "img/cards/card-collins.jpg"}, {"characterUID": "10", "name": "Andy Beshear", "title": "Attorney General", "image": "img/characters/character-abeshear.jpg", "card": "img/cards/card-abeshear.jpg"}];
     
+    //These are the quotes we want to serve the user once they have chosen a character.
+    //If there is more than one quote per character, the system will randomly select one.
+    //Quote items match with character items through the characterUID key. 
+    //json created from a csv using csvkit
     quotes = [{"quoteUID": "1", "characterUID": "1", "characterName": "Mitch McConnell", "quote": "#TaxReform continues to deliver for American workers", "mad_lib": "*** continues to deliver for *** on Valentine's Day.", "source_link": "https://twitter.com/SenateMajLdr/status/956264961596063744", "source": "twitter"}, {"quoteUID": "2", "characterUID": "1", "characterName": "Mitch McConnell", "quote": "Here’s the difference between the Democratic Leader and the rest of the #Senate tonight: He wants to keep the government shut down for hundreds of millions of Americans until we finish negotiating on illegal immigration.", "mad_lib": "Here's the difference between *** and the rest of the ***: *** wants to keep ***.", "source_link": "https://twitter.com/SenateMajLdr/status/954864836936175618", "source": "twitter"}, {"quoteUID": "12", "characterUID": "2", "characterName": "Alison Lundergan Grimes", "quote": "Dear @realDonaldTrump, you're not fooling anyone. You do not represent us.", "mad_lib": "Dear ***. You’re not fooling anyone. You ***. Happy Valentine’s!", "source_link": "https://twitter.com/AlisonForKY/status/755929148686798848", "source": "twitter"}, {"quoteUID": "13", "characterUID": "2", "characterName": "Alison Lundergan Grimes", "quote": "There's not enough bourbon in Kentucky to make the request from @POTUS's \"election commission\" seem sensible.", "mad_lib": "There's not enough bourbon in Kentucky to make *** seem sensible this Valentine's Day.", "source_link": "", "source": "twitter"}, {"quoteUID": "6", "characterUID": "3", "characterName": "Matt Bevin", "quote": "I have no respect for people who lie for personal or political gain. Russ Meyer is such a person.", "mad_lib": "Happy Valentine’s! I have *** for people who ***. *** is such a person!", "source_link": "https://www.facebook.com/mattbevinforkentucky/posts/1125499390899704:0", "source": "facebook"}, {"quoteUID": "7", "characterUID": "3", "characterName": "Matt Bevin", "quote": "The purpose of government: Protection, Infrastructure and Education. That is exactly what this budget will take care of. ", "mad_lib": "The purpose of ***: ***, *** and ***. That is exactly what this *** will take care of on Valentine's Day.", "source_link": "https://twitter.com/GovMattBevin/status/955192856687325185", "source": "twitter"}, {"quoteUID": "15", "characterUID": "4", "characterName": "Jenean Hampton", "quote": "“I would not be studying history, unless, you have a job lined up.\"", "mad_lib": "This Valentine's Day, I would not be ***, unless, ***.", "source_link": "https://www.courier-journal.com/story/news/politics/2016/04/08/dont-study-history-lt-gov-tells-students/82794792/", "source": "CJ"}, {"quoteUID": "9", "characterUID": "5", "characterName": "Steve Beshear", "quote": "At some point, Matt Bevin has to realize there is a time to campaign and a time to govern... Kentuckians deserve better.", "mad_lib": "At some point, *** has to realize there is a time to *** and a time to ***. *** deserves better on Valentine’s Day.", "source_link": "https://www.facebook.com/govstevebeshear/posts/10154252607582590", "source": "facebook"}, {"quoteUID": "10", "characterUID": "5", "characterName": "Steve Beshear", "quote": "Takeaway from all this: Ky families need more governing and less campaigning. Because there's a huge difference.", "mad_lib": "Takeaway from all this: *** needs more ***. Happy Valentine's Day!", "source_link": "https://twitter.com/Steve__Beshear/status/725425114175643648", "source": "twitter"}, {"quoteUID": "11", "characterUID": "7", "characterName": "Robert Stivers", "quote": "Politics are over now it is time 4 policy discussions. Already discussions w Leader Hoover & Gov Bevin & staff! Ds have reached out as well", "mad_lib": "Happy Valentine's Day. Politics are over now it is time 4 ***. ", "source_link": "https://twitter.com/kysenatepres/status/796692002154971140", "source": "twitter"}, {"quoteUID": "3", "characterUID": "8", "characterName": "Rand Paul", "quote": "Protecting the entire Bill of Rights is one of the main reasons I ran for office. I'll remain vigilant in that cause", "mad_lib": "*** is one of the main reasons I ***. I’ll remain vigilant on Valentine’s Day.", "source_link": "https://twitter.com/RandPaul/status/823688092028719112", "source": "twitter"}, {"quoteUID": "4", "characterUID": "8", "characterName": "Rand Paul", "quote": "I remember a time when Republicans actually said we should reduce the size and scope of government…", "mad_lib": "I remember a time when *** actually said we should ***. Happy Valentine’s!!", "source_link": "https://twitter.com/RandPaul/status/818586079485956097", "source": "twitter"}, {"quoteUID": "5", "characterUID": "8", "characterName": "Rand Paul", "quote": "I fight for the Constitution, individual liberty and the freedoms that make this country great.", "mad_lib": "I fight for the *** that make *** great.", "source_link": "", "source": "twitter bio"}, {"quoteUID": "14", "characterUID": "9", "characterName": "Martha Layne Collins", "quote": "\"The most important quality of leadership is a belief that we can do better.\"", "mad_lib": "The most important quality of *** is a belief that ***.", "source_link": "", "source": "Personal Papers of Martha Layne Collins"}, {"quoteUID": "8", "characterUID": "10", "characterName": "Andy Beshear", "quote": "I would suggest in the future that if the governor has any questions on the hard work of my office that he walk across the hallway and ask to meet with me, and not hide behind Facebook.", "mad_lib": "For Valentine’s Day, I would suggest that *** walk across the hallway and ***, with love.", "source_link": "http://www.courier-journal.com/story/news/politics/2017/01/25/bevin-beshear-wont-defend-ultrasound-law/97038266/", "source": "web"}];
     
+    //More on ractive.js here: https://ractive.js.org/
     ractive = new Ractive({
       el: '#container',
       template: '#template',
       data: { 
         cards: cards,
-        editme: 'blank'
       }
     });
-        
+    
+    //When a character is clicked...
     ractive.on('activate', function(event){
+      
+      //... set the currentCard variable
       ractive.set('currentCard', event.context);
       
       ractive.observe('currentCard', function(newValue, oldValue, keypath){
         if(newValue){
-          //Create an array for quote available to the selected card
+          //Create an array for quotes available to the currentCard
           var possibleQuotes = [];
           
+          //For each quote, if the characterUID of the quote matches the characterUID of the currentCard,
+          //add the quote to our array
           for(var i = 0; i < quotes.length; i++){
             var quoteCharID = quotes[i]['characterUID'];
             var charID = newValue.characterUID;
             
-            //If the characterID of the quote matches the characterID 
-            //of the chosed card, add the quote to possibleQuotes array.
             if(charID == quoteCharID){
               possibleQuotes.push(quotes[i])
             }
@@ -222,7 +238,7 @@
           var randoQuote = possibleQuotes[Math.floor(Math.random() * possibleQuotes.length)];
           var madLib = randoQuote.mad_lib;
           
-          //Split the madLib versio of the quote by those three asktrisks
+          //Split the madLib version of the quote by those three asktrisks
           //then join it together with editable spans
           var editableMadLib = madLib.split("***").join('<span on-click="activateEdit" class="fill-in" contenteditable="true" style="display:inline-block; min-width:75px;" value="{{editme}}">Edit this</span>');
                     
@@ -235,8 +251,8 @@
       });
       
       //Empty the contenteditable spans when the user clicks. This is
-      // particularly useful for mobile.
-      // http://stackoverflow.com/questions/9093424/placeholder-in-contenteditable-focus-event-issue
+      //particularly useful for mobile.
+      //http://stackoverflow.com/questions/9093424/placeholder-in-contenteditable-focus-event-issue
       $('span.fill-in').on('activateEdit', function() {
         $(this).empty();
         var range, sel;
@@ -273,7 +289,14 @@
       var card = ractive.get('card');
       
       //Filter for bad words. If bad words are detected set variable
-      // to Yes and throw and alert.
+      //to Yes and throw and alert.
+      //The base profanityFilter script comes from https://github.com/ChaseFlorell/jQuery.ProfanityFilter
+      //In addition to filtering out swearwords in the provided externalSwears file, I have added 4 additional filters:
+      //1) Filter numbers or nonword characters within words, i.e. sh1t
+      //2) Filter repetition of more than 3 letters, i.e. shiiit
+      //3) Filter single character words separated by non-word characters, i.e. s h i t
+      //4) Filter plurals of bad words in externalSwears json, i.e. shits 
+       
       $('#quote').profanityFilter({
         externalSwears: 'data/allSwears-20180212.json',
         profaneText: function(data){
@@ -283,7 +306,7 @@
       });
       
       //If that bad words variable is set to Yes, don't allow
-      // the user to continue. Toss them back to madLibs section.
+      //the user to continue. Toss them back to madLibs section.
       //If no bad words, continue on.
       if(profaneText == 'Yes'){
         $('html, body').animate({
