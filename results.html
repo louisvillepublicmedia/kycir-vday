@@ -25,8 +25,7 @@
 
   <body>
     <!-- Google Analytics code. Reminder, if you're embedding this interactive on your site somewhere,
-        keeping this script in here will double count pageviews.
-    -->
+        keeping this script in here will double count pageviews. -->
     <script>
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -36,7 +35,7 @@
       ga('send', 'pageview');
     </script>
     
-    <!-- Facebook sdk share code -->
+    <!-- Facebook share code -->
     <div id="fb-root"></div>
     <script>
       (function(d, s, id) {
@@ -55,12 +54,10 @@
         js.id = id;
         js.src = "https://platform.twitter.com/widgets.js";
         fjs.parentNode.insertBefore(js, fjs);
-      
         t._e = [];
         t.ready = function(f) {
           t._e.push(f);
         };
-      
         return t;
       }(document, "script", "twitter-wjs"));
     </script>
@@ -94,7 +91,8 @@
       </div>
     </div>
   
-    <div id="container" class="container-fluid"></div>
+    <!-- This is where all of our content will be populated -->
+    <div id="container"></div>
     
     <div id="footer" class="row">
       <div class="three columns">
@@ -106,6 +104,7 @@
       </div>
     </div>
     
+    <!-- Here's our ractive.js script. This populates our #container div -->
     <script id='template' type='text/ractive'>
       {{#if featureImage}}
       <div id="feature">
@@ -136,6 +135,9 @@
         $(this).select();
       });
       
+      //Here's where we override the Facebook OG meta tags so users can share their specific images,
+      //not just the default, pre-cached OG tags. You're going to need to set up a FB developer app
+      //in order to use this.
       function shareOverrideOGMeta(overrideLink, overrideTitle, overrideDescription, overrideImage){
       	FB.ui({
       		method: 'share_open_graph',
@@ -150,12 +152,13 @@
       		})
       	},
       	function (response) {
-        	console.log('well... it ran.');
       	});
       };
       
-      
-      $.getJSON( 'data/all-images.json', function( data ) {
+      //Retrieve all the image urls from the all-images.json file
+      //Image urls are added to that file by the scripts/fetch-img.py script
+      $.getJSON( 'data/all-images.json', function(data){
+        
         images = data;
             
         ractive = new Ractive({
@@ -169,12 +172,14 @@
       
         var urlHash, imageID, imageURL, pageURL, fbTitle, fbDesc;
         
-        urlHash = window.location.hash;
+        //We need to set these variables so we can pass them on to the FB OG tag generator 
         pageURL = window.location.href;
-        
+        urlHash = window.location.hash;
         fbTitle = 'Operation Make Love, Not Hate';
         fbDesc = 'Pick a Kentucky politician. Complete the statement provided, mad lib style. Send, share and admire!';
         
+        //If the url the user is coming to the site by has a hash parameter already, 
+        //create and set the that card's image url and page url
         if(urlHash){
           imageID = urlHash.replace('#','');
           imageURL = 'http://interactives.kycir.org/vday/uploads/' + imageID + '.png';
@@ -182,10 +187,9 @@
           ractive.set('featureImage', imageURL);
           ractive.set('featureURL',pageURL);
           
-        }else{
-          
         };
         
+        //When a card is clicked, reset the image url and page url based on that card
         ractive.on('activate', function(event){
           imageURL = 'http://interactives.kycir.org/vday/uploads/' + event.context.imageURL;
           pageURL = ('http://interactives.kycir.org/vday/results.html#' + event.context.imageURL).replace('.png','');
@@ -196,13 +200,18 @@
           ractive.set('featureImage', imageURL);
           ractive.set('featureURL',pageURL);
           
+          //Set clicked card as the featured image at the top of the list of cards
+          //and scoll the user to the top of the page to view it
           $('html, body').animate({
             scrollTop: $("#feature").offset().top
           }, 1000);
           
+          //Run function that will dynamically set Facebook OG tags for better sharing
           shareOverrideOGMeta(pageURL, fbTitle, fbDesc, imageURL);
         });
         
+        //If the FB share button in the header or the link below the feature image is clicked,
+        //we also want to run the function that resets the OG tags
         $('.shareFB').click(function(event){
           event.preventDefault();
           console.log('you clicked');
