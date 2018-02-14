@@ -1,5 +1,4 @@
 #!/usr/bin/python3
-
 import glob, os, json
 
 os.chdir('/var//www/html/vday/uploads/')
