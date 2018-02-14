@@ -1,3 +1,5 @@
+(this README is a work in progress)
+
 # Operation Make Love, Not War
 
 Live demo: http://interactives.kycir.org/vday/play.html
@@ -25,4 +27,5 @@ What you'll need to do:
 ## Requirements
 
 This app is best deployed on a server over which you have control, like an AWS EC2 server, as it requires a few server-side processes.
+
 
